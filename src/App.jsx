@@ -121,15 +121,19 @@ const App = () => {
               Crafted with precision and tranquility
             </motion.p>
             <div className="mt-4 flex justify-center gap-4">
-              {['GitHub', 'LinkedIn', 'Twitter'].map((platform) => (
+              {[
+                { name: 'GitHub', url: 'https://github.com/Maazkhan012' },
+                { name: 'LinkedIn', url: 'https://www.linkedin.com/in/maazkhan123/' },
+                { name: 'Twitter', url: '#' }
+              ].map(({ name, url }) => (
                 <motion.a
-                  key={platform}
-                  href="#"
+                  key={name}
+                  href={url}
                   className="text-sm text-gray-500 hover:text-red-600 transition-colors"
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
-                  {platform}
+                  {name}
                 </motion.a>
               ))}
             </div>
