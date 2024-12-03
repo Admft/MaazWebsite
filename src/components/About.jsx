@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { Shield, Code, Brain, Cpu, Dumbbell, Book, Lock, Mountain } from 'lucide-react';
+import { Shield, Code, Brain, Cpu, Dumbbell, Book, Lock, Mountain, Terminal, Database, Cloud, Wifi, Monitor, Server, Key, Bug } from 'lucide-react';
 
-// FloatingIcon component remains the same
-const FloatingIcon = ({ children, delay, duration = 3, x = 20, y = 20 }) => (
+// Enhanced FloatingIcon component
+const FloatingIcon = ({ children, delay, duration = 3, x = 20, y = 20, rotate = 0, top, left }) => (
   <motion.div
     animate={{
       y: [-y, y],
       x: [-x, x],
+      rotate: [-rotate, rotate],
+      scale: [1, 1.1, 1],
     }}
     transition={{
       duration,
@@ -17,6 +19,69 @@ const FloatingIcon = ({ children, delay, duration = 3, x = 20, y = 20 }) => (
       ease: "easeInOut"
     }}
     className="absolute text-red-600/20"
+    style={{ top, left }}
+  >
+    {children}
+  </motion.div>
+);
+
+// Add new animation components
+const OrbitalIcon = ({ children, radius = 100, duration = 10, delay = 0, clockwise = true, top, left }) => {
+  const variants = {
+    orbit: {
+      rotate: clockwise ? 360 : -360,
+      transition: {
+        duration,
+        delay,
+        repeat: Infinity,
+        ease: "linear"
+      }
+    }
+  };
+
+  return (
+    <motion.div
+      className="absolute"
+      style={{ width: radius * 2, height: radius * 2, top, left }}
+      variants={variants}
+      animate="orbit"
+    >
+      <motion.div
+        className="absolute"
+        style={{ left: radius, top: 0 }}
+        animate={{ rotate: clockwise ? -360 : 360 }}
+        transition={{ duration, delay, repeat: Infinity, ease: "linear" }}
+      >
+        {children}
+      </motion.div>
+    </motion.div>
+  );
+};
+
+const WaveIcon = ({ children, delay = 0, duration = 4, amplitude = 50, top, left }) => (
+  <motion.div
+    className="absolute"
+    style={{ top, left }}
+    animate={{
+      y: [amplitude, -amplitude],
+      x: [-amplitude, amplitude],
+    }}
+    transition={{
+      y: {
+        duration,
+        delay,
+        repeat: Infinity,
+        repeatType: "reverse",
+        ease: "easeInOut"
+      },
+      x: {
+        duration: duration * 1.5,
+        delay,
+        repeat: Infinity,
+        repeatType: "reverse",
+        ease: "easeInOut"
+      }
+    }}
   >
     {children}
   </motion.div>
@@ -67,11 +132,50 @@ const About = () => {
   return (
     <div className="relative min-h-screen overflow-hidden">
       {/* Background Animation - Same as before */}
-      <div className="fixed inset-0 opacity-30">
-        <FloatingIcon delay={0}><Shield size={48} /></FloatingIcon>
-        <FloatingIcon delay={1} x={30} y={40}><Code size={32} /></FloatingIcon>
-        <FloatingIcon delay={2} duration={4}><Brain size={40} /></FloatingIcon>
-        <FloatingIcon delay={1.5} x={40} y={30}><Cpu size={36} /></FloatingIcon>
+      <div className="fixed inset-0 pointer-events-none">
+        {/* Floating Icons distributed across the viewport */}
+        <FloatingIcon delay={0} x={40} y={30} rotate={15} top="10%" left="10%">
+          <Shield size={48} />
+        </FloatingIcon>
+        <FloatingIcon delay={1} x={30} y={40} rotate={-15} top="20%" left="80%">
+          <Code size={32} />
+        </FloatingIcon>
+        <FloatingIcon delay={2} duration={4} x={50} y={50} rotate={20} top="40%" left="15%">
+          <Brain size={40} />
+        </FloatingIcon>
+        <FloatingIcon delay={1.5} x={40} y={30} rotate={-20} top="60%" left="75%">
+          <Cpu size={36} />
+        </FloatingIcon>
+        
+        {/* Orbital Icons */}
+        <OrbitalIcon radius={80} duration={8} clockwise={true} top="30%" left="25%">
+          <Terminal size={24} className="text-red-600/20" />
+        </OrbitalIcon>
+        <OrbitalIcon radius={100} duration={12} clockwise={false} delay={2} top="70%" left="65%">
+          <Database size={28} className="text-red-600/20" />
+        </OrbitalIcon>
+        
+        {/* Wave Motion Icons */}
+        <WaveIcon amplitude={60} duration={5} delay={1} top="45%" left="40%">
+          <Cloud size={32} className="text-red-600/20" />
+        </WaveIcon>
+        <WaveIcon amplitude={40} duration={6} delay={2} top="85%" left="30%">
+          <Wifi size={28} className="text-red-600/20" />
+        </WaveIcon>
+        
+        {/* Additional Background Elements */}
+        <FloatingIcon delay={3} x={60} y={40} rotate={25} top="15%" left="45%">
+          <Monitor size={42} />
+        </FloatingIcon>
+        <FloatingIcon delay={2.5} x={45} y={55} rotate={-25} top="75%" left="85%">
+          <Server size={38} />
+        </FloatingIcon>
+        <FloatingIcon delay={1.8} x={35} y={45} rotate={15} top="90%" left="20%">
+          <Key size={34} />
+        </FloatingIcon>
+        <FloatingIcon delay={3.5} x={50} y={35} rotate={-15} top="25%" left="70%">
+          <Bug size={30} />
+        </FloatingIcon>
       </div>
 
       {/* Main Content */}
